@@ -1,0 +1,17 @@
+server:
+  port: 9527
+spring:
+  servlet:
+    multipart:
+      max-file-size: -1
+      max-request-size: -1
+  http:
+    encoding:
+      charset: UTF-8
+      enabled: true
+      force: true
+path:
+  #文书目录
+  ws-path: N:\
+  #电子卷宗目录
+  dzjz-path: Z:\JdNewData

@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>文件发送路径修改</title>
+    <script src="jquery-3.3.1.min.js"></script>
+</head>
+
+<script>
+    $(function () {
+        getPath();
+    })
+
+    function getPath() {
+        $.get("/mySend/getWsPath",function (result) {
+            $("#wsPath").val(result);
+        })
+        $.get("/mySend/getDzjzPath",function (result) {
+            $("#dzjzPath").val(result);
+        })
+    }
+
+    function updatePath(el) {
+        $(el).prev().removeAttr("disabled");
+        $(el).next().show();
+        $(el).hide();
+
+    }
+
+    function commitWsPath(el) {
+        $.post("/mySend/setWsPath",{path:$("#wsPath").val()},function (result) {
+            if(result.state == 0){
+                $("#wsPath").val(result.data);
+                commitPath(el);
+                alert("修改成功")
+            } else {
+                alert(result.message);
+            }
+        })
+    }
+
+    function commitDzjzPath(el) {
+        $.post("/mySend/setDzjzPath",{path:$("#dzjzPath").val()},function (result) {
+            if(result.state == 0){
+                $("#dzjzPath").val(result.data);
+                commitPath(el);
+                alert("修改成功")
+            } else {
+                alert(result.message);
+            }
+        })
+
+    }
+
+
+  function commitPath(el) {
+        $(el).prev().prev().attr("disabled","disabled");
+        $(el).prev().show();
+        $(el).hide();
+    }
+
+
+</script>
+<body>
+
+<div>
+    <p>文书地址：</p>
+    <input id="wsPath" type="text" disabled>
+    <input type="button" value="修改" onclick="updatePath(this)">
+    <input type="button" value="确认" style="display: none"  onclick="commitWsPath(this)">
+</div>
+<br/>
+<div>
+    <p>电子卷宗地址：</p>
+    <input id="dzjzPath" type="text" disabled>
+    <input type="button" value="修改" onclick="updatePath(this)">
+    <input type="button" value="确认" style="display: none"  onclick="commitDzjzPath(this)">
+</div>
+
+</body>
+
+</html>

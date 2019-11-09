@@ -1,0 +1,17 @@
+ application.yml文件里
+  ws-path: N:\
+  dzjz-path: Z:\JdNewData
+
+logback.xml里
+<!--配置总的日志监听级别-->
+    <root level="info">
+<!--        <appender-ref ref="STDOUT"></appender-ref>-->
+        <appender-ref ref="INFO_LOGGER"></appender-ref>
+        <appender-ref ref="ERROR_LOGGER"></appender-ref>
+    </root>
+
+
+ bat命令里的jar版本和路径
+
+ mvn 打包命令
+ mvn package spring-boot:repackage
