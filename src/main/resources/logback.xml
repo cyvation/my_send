@@ -61,7 +61,7 @@
     </appender>
     <!--配置总的日志监听级别-->
     <root level="info">
-        <appender-ref ref="STDOUT"></appender-ref>
+<!--        <appender-ref ref="STDOUT"></appender-ref>-->
         <appender-ref ref="INFO_LOGGER"></appender-ref>
         <appender-ref ref="WARN_LOGGER"></appender-ref>
     </root>

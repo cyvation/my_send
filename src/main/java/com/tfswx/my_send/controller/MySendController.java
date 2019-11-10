@@ -25,6 +25,7 @@ public class MySendController {
     private static final String WS_TYPE = "w";
     private static final String DZJZ_TYPE = "d";
 
+    private static int count;
     /**
      * 获取文件byte[]并反馈
      *
@@ -35,12 +36,20 @@ public class MySendController {
     @RequestMapping("/getFile")
     @ResponseBody
     public byte[] getFile(String fileName, String fileType) {
+
+        count++;
+        if(count<34567 && count%239==0){//只是便于查看窗口是否正常运行，具体信息看日志文件
+            System.out.print(".");
+        }else{
+            if (count>=34567) {count=0;
+                System.out.println(".");}
+        }
         File file;
         switch (fileType) {
             case WS_TYPE:
                 file = new File(wsPath + fileName);
                 if (file.exists()) {
-                    log.info("文书访问："+fileName);
+                    log.info("文书存在并返回："+fileName);
                     return getBytes(file);
                 } else {
                     log.info("文书不存在："+fileName);
@@ -49,7 +58,7 @@ public class MySendController {
             case DZJZ_TYPE:
                 file = new File(dzjzPath + fileName);
                 if (file.exists()) {
-                    log.info("卷宗访问："+fileName);
+                    log.info("卷宗存在并返回："+fileName);
                     return getBytes(file);
                 } else {
                     log.info("卷宗不存在："+fileName);
