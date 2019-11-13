@@ -1,16 +1,14 @@
 package com.tfswx.my_send.controller;
 
 import com.tfswx.my_send.utils.JsonResult;
+import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
+import java.io.*;
 
 @Controller
 @RequestMapping("/mySend")
@@ -38,10 +36,10 @@ public class MySendController {
     public byte[] getFile(String fileName, String fileType) {
 
         count++;
-        if(count<34567 && count%239==0){//只是便于查看窗口是否正常运行，具体信息看日志文件
+        if(count<10100 && count%101==0){//只是便于查看窗口是否正常运行，具体信息看日志文件
             System.out.print(".");
         }else{
-            if (count>=34567) {count=0;
+            if (count>=10100) {count=0;
                 System.out.println(".");}
         }
         File file;
@@ -52,7 +50,7 @@ public class MySendController {
                     log.info("文书存在并返回："+fileName);
                     return getBytes(file);
                 } else {
-                    log.info("文书不存在："+fileName);
+                    log.warn("文书不存在："+fileName);
                     return new byte[0];
                 }
             case DZJZ_TYPE:
@@ -61,7 +59,7 @@ public class MySendController {
                     log.info("卷宗存在并返回："+fileName);
                     return getBytes(file);
                 } else {
-                    log.info("卷宗不存在："+fileName);
+                    log.warn("卷宗不存在："+fileName);
                     return new byte[0];
                 }
         }
@@ -78,21 +76,20 @@ public class MySendController {
     @RequestMapping("/getWsPath")
     @ResponseBody
     public String getWsPath(String path) {
-        log.warn("获取文书路径");
+        log.info("获取文书路径");
         return wsPath;
     }
 
     @RequestMapping("/getDzjzPath")
     @ResponseBody
     public String getDzjzPath(String path) {
-        log.warn("获取卷宗路径");
+        log.info("获取卷宗路径");
         return dzjzPath;
     }
 
     @RequestMapping("/setWsPath")
     @ResponseBody
     public JsonResult setWsPath(String path) {
-        log.warn("响应文书路径配置");
         File myfile = new File(path);
         boolean isUpdate = false;
         String test = "^\\d{6}$";
@@ -113,8 +110,10 @@ public class MySendController {
             }else {
                 wsPath = myfile.getAbsolutePath();
             }
+            log.warn("文书地址修改成功");
             return new JsonResult(wsPath);
         } else {
+            log.warn("文书地址修改失败，未检测到文书文件");
             return new JsonResult(1, "文书地址修改失败，未检测到文书文件");
         }
 
@@ -125,7 +124,6 @@ public class MySendController {
     @RequestMapping("/setDzjzPath")
     @ResponseBody
     public JsonResult setDzjzPath(String path) {
-        log.warn("响应电子卷宗路径配置");
         File myfile = new File(path);
         boolean isUpdate = false;
         String test = "^\\d{6}$";
@@ -142,8 +140,10 @@ public class MySendController {
         }
         if (isUpdate) {
             dzjzPath = getPathByPath(myfile.getAbsolutePath());
+            log.warn("电子卷宗地址修改成功");
             return new JsonResult(dzjzPath);
         } else {
+            log.warn("电子卷宗地址修改失败,未检测到电子卷宗文件");
             return new JsonResult(1, "电子卷宗地址修改失败,未检测到电子卷宗文件");
         }
 
@@ -204,23 +204,15 @@ public class MySendController {
                 bos.write(b, 0, n);
             }
             buffer = bos.toByteArray();
-        } catch (IOException e) {
+        } catch (FileNotFoundException e) {
             e.printStackTrace();
+            log.error(e.getMessage());
+        } catch (IOException ioe) {
+            ioe.printStackTrace();
+            log.error(ioe.getMessage());
         } finally {
-            if (fis != null) {
-                try {
-                    fis.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-            if (bos != null) {
-                try {
-                    bos.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
+            IOUtils.closeQuietly(fis);
+            IOUtils.closeQuietly(bos);
         }
         return buffer;
     }

@@ -1,6 +1,7 @@
 package com.tfswx.my_send.init;
 
 import com.tfswx.my_send.controller.MySendController;
+import com.tfswx.my_send.utils.KillPort;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
@@ -9,17 +10,18 @@ import java.io.File;
 
 @Component
 public class FilePathInit implements CommandLineRunner {
+
     @Value("${path.ws-path}")
-    private  String cfg_wsPath ;
+    private String cfg_wsPath;
     @Value("${path.dzjz-path}")
-    private  String cfg_dzjzPath ;
+    private String cfg_dzjzPath;
 
     @Override
-    public void run(String... args){
-        MySendController.wsPath=cfg_wsPath;
-        MySendController.dzjzPath=cfg_dzjzPath;
+    public void run(String... args) {
+        MySendController.wsPath = cfg_wsPath;
+        MySendController.dzjzPath = cfg_dzjzPath;
 
-       getFilePath();
+//       getFilePath();
 
         System.out.println("文书目录：" + MySendController.wsPath);
         System.out.println("电子卷宗目录：" + MySendController.dzjzPath);
@@ -46,7 +48,7 @@ public class FilePathInit implements CommandLineRunner {
                         Boolean judge = judgeFile(file);
                         if (judge != null) {
                             if (judge) {
-                                MySendController.dzjzPath = roots[i].getAbsolutePath().substring(0,2);
+                                MySendController.dzjzPath = roots[i].getAbsolutePath().substring(0, 2);
                                 dzjzPathIsFind = true;
                             } else {
                                 MySendController.wsPath = roots[i].getAbsolutePath();
@@ -89,7 +91,6 @@ public class FilePathInit implements CommandLineRunner {
         }
         return null;
     }
-
 
 
 }
