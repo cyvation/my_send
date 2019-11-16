@@ -76,14 +76,14 @@ public class MySendController {
     @RequestMapping("/getWsPath")
     @ResponseBody
     public String getWsPath(String path) {
-        log.info("获取文书路径");
+//        log.info("获取文书路径");
         return wsPath;
     }
 
     @RequestMapping("/getDzjzPath")
     @ResponseBody
     public String getDzjzPath(String path) {
-        log.info("获取卷宗路径");
+//        log.info("获取卷宗路径");
         return dzjzPath;
     }
 
@@ -110,10 +110,10 @@ public class MySendController {
             }else {
                 wsPath = myfile.getAbsolutePath();
             }
-            log.warn("文书地址修改成功");
+            log.info("文书地址修改成功："+wsPath);
             return new JsonResult(wsPath);
         } else {
-            log.warn("文书地址修改失败，未检测到文书文件");
+            log.error("文书地址修改失败，未检测到文书文件");
             return new JsonResult(1, "文书地址修改失败，未检测到文书文件");
         }
 
@@ -140,10 +140,10 @@ public class MySendController {
         }
         if (isUpdate) {
             dzjzPath = getPathByPath(myfile.getAbsolutePath());
-            log.warn("电子卷宗地址修改成功");
+            log.info("电子卷宗地址修改成功："+dzjzPath);
             return new JsonResult(dzjzPath);
         } else {
-            log.warn("电子卷宗地址修改失败,未检测到电子卷宗文件");
+            log.error("电子卷宗地址修改失败,未检测到电子卷宗文件");
             return new JsonResult(1, "电子卷宗地址修改失败,未检测到电子卷宗文件");
         }
 

@@ -1,5 +1,7 @@
 server:
   port: 9527
+  tomcat:
+    max-threads: 1500
 spring:
   servlet:
     multipart:

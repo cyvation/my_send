@@ -10,16 +10,16 @@ set install_path=%~dp0
 cd /D %install_path%
 
 rem 关闭端口占用--
-for /f "tokens=5" %%i in ('netstat -aon ^| findstr ":9527"') do (
-set n=%%i
-)
-if defined n (taskkill /f /pid %n%)
+rem for /f "tokens=5" %%i in ('netstat -aon ^| findstr ":9527"') do (
+rem set n=%%i
+rem )
+rem if defined n (taskkill /f /pid %n%)
 rem 关闭端口占用--
  
  
 java   -Dfile.encoding=GBK -jar my_send-2.1.jar
 
-@pause
+rem @pause
 
 
 
